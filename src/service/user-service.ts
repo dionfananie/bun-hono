@@ -1,3 +1,4 @@
+import type { User } from "@prisma/client";
 import { prismaClient } from "../application/database";
 import {
   toUserResponse,
@@ -68,5 +69,26 @@ export class Userservice {
     const response = toUserResponse(user);
     response.token = user.token!;
     return response;
+  }
+
+  static async get(token: string | undefined): Promise<User> {
+    const result = UserValidation.TOKEN.safeParse(token);
+    if (result.error) {
+      throw new HTTPException(401, {
+        message: "Unauthorized",
+      });
+    }
+    const user = await prismaClient.user.findFirst({
+      where: {
+        token,
+      },
+    });
+
+    if (!user) {
+      throw new HTTPException(401, {
+        message: "Unauthorized",
+      });
+    }
+    return user;
   }
 }
