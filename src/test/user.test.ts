@@ -215,3 +215,33 @@ describe("PATCH /api/users/current", () => {
     expect(body.data).toBeDefined();
   });
 });
+
+describe("PATCH /api/users/current", () => {
+  beforeEach(async () => {
+    await UserTest.create();
+  });
+
+  afterEach(async () => {
+    await UserTest.delete();
+  });
+  it("should be able to logout", async () => {
+    const response = await app.request("/api/users/current", {
+      method: "DELETE",
+      headers: {
+        Authorization: "test",
+      },
+    });
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data).toBeDefined();
+    expect(body.data.success).toBe(true);
+  });
+
+  it("should not be able to logout", async () => {
+    const response = await app.request("/api/users/current", {
+      method: "DELETE",
+    });
+
+    expect(response.status).toBe(401);
+  });
+});

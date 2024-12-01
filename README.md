@@ -113,15 +113,6 @@ Endpoint: DELETE /api/users/current
 
 - Authorization: token
 
-#### Request Body:
-
-```json
-{
-    "name":string,
-    "password": string,
-}
-```
-
 #### Response Body (success):
 
 ```json
