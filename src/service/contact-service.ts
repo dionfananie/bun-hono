@@ -1,7 +1,9 @@
 import type { User } from "@prisma/client";
-import type {
-  ContactResponse,
-  CreateContactRequest,
+import {
+  toContactResponse,
+  type ContactResponse,
+  type CreateContactRequest,
+  type UpdateContactRequest,
 } from "../model/contact-model";
 import { ContactValidation } from "../validation/contact-validation";
 import { prismaClient } from "../application/database";
@@ -23,10 +25,11 @@ export class ContactService {
     return response;
   }
 
-  static async get(user: User, id: number) {
+  static async checkingUser(user: User, id: number): Promise<ContactResponse> {
     const response = await prismaClient.contact.findUnique({
       where: {
         id,
+        username: user.username,
       },
     });
     if (!response) {
@@ -34,6 +37,42 @@ export class ContactService {
         message: "contact not found",
       });
     }
-    return response;
+    return toContactResponse(response);
+  }
+
+  static async get(user: User, id: number): Promise<ContactResponse> {
+    id = ContactValidation.GET.parse(id);
+    return await this.checkingUser(user, id);
+  }
+
+  static async update(
+    user: User,
+    request: UpdateContactRequest
+  ): Promise<ContactResponse> {
+    request = ContactValidation.UPDATE.parse(request);
+
+    await this.checkingUser(user, request.id);
+    const contact = await prismaClient.contact.update({
+      where: {
+        username: user.username,
+        // username: user.username,
+        id: request.id,
+      },
+      data: request,
+    });
+
+    return toContactResponse(contact);
+  }
+
+  static async delete(user: User, id: number): Promise<boolean> {
+    id = ContactValidation.DELETE.parse(id);
+    await this.checkingUser(user, id);
+    await prismaClient.contact.delete({
+      where: {
+        username: user.username,
+        id: id,
+      },
+    });
+    return true;
   }
 }

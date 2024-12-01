@@ -31,7 +31,7 @@ prismaClient.$on("error", (e) => {
 });
 
 prismaClient.$on("info", (e) => {
-  logger.info(e);
+  // logger.info(e);
 });
 
 prismaClient.$on("warn", (e) => {

@@ -18,7 +18,7 @@ describe("POST /api/users", () => {
       }),
     });
     const body = await resp.json();
-    logger.debug(body);
+
     expect(resp.status).toBe(400);
     expect(body.errors).toBeDefined();
   });
@@ -35,7 +35,7 @@ describe("POST /api/users", () => {
       }),
     });
     const body = await response.json();
-    logger.debug(body);
+
     expect(response.status).toBe(400);
     expect(body.errors).toBeDefined();
   });
@@ -50,7 +50,6 @@ describe("POST /api/users", () => {
       }),
     });
     const body = await response.json();
-    logger.debug(body);
 
     expect(response.status).toBe(200);
     expect(body.data).toBeDefined();
@@ -77,7 +76,7 @@ describe("POST /api/users/login", () => {
       }),
     });
     const body = await resp.json();
-    logger.debug(body);
+
     expect(resp.status).toBe(200);
     expect(body.data.token).toBeDefined();
   });
@@ -91,7 +90,7 @@ describe("POST /api/users/login", () => {
       }),
     });
     const body = await response.json();
-    logger.debug(body);
+
     expect(response.status).toBe(401);
     expect(body.errors).toBeDefined();
   });
@@ -105,7 +104,7 @@ describe("POST /api/users/login", () => {
       }),
     });
     const body = await response.json();
-    logger.debug(body);
+
     expect(response.status).toBe(401);
     expect(body.errors).toBeDefined();
   });
