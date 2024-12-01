@@ -18,7 +18,7 @@ To deploy this project run
 
 ## Tech Stack
 
-**Server:** Bun, Hono, Prisma ORM, Typescript, Zod
+**Server:** Bun, Hono, Prisma ORM, Typescript, Zod, Supabase Postgres
 
 # Spec API
 
