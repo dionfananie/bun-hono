@@ -1,3 +1,25 @@
+To install package and run this project run
+
+```bash
+  bun i
+```
+
+```bash
+  bun run dev
+```
+
+## Deployment
+
+To deploy this project run
+
+```bash
+  bun start
+```
+
+## Tech Stack
+
+**Server:** Bun, Hono, Prisma ORM, Typescript, Zod
+
 # Spec API
 
 ### User API Spec
