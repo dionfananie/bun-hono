@@ -4,6 +4,7 @@ import {
   toUserResponse,
   type LoginUserRequest,
   type RegisterUserRequest,
+  type UpdateUserRequest,
   type UserResponse,
 } from "../model/user-mode.l";
 import { UserValidation } from "../validation/user-validation";
@@ -90,5 +91,31 @@ export class Userservice {
       });
     }
     return user;
+  }
+
+  static async update(
+    user: User,
+    request: UpdateUserRequest
+  ): Promise<UserResponse> {
+    request = UserValidation.UPDATE.parse(request);
+
+    if (request.name) {
+      user.name = request.name;
+    }
+    if (request.password) {
+      user.password = await Bun.password.hash(request.password, {
+        algorithm: "bcrypt",
+        cost: 10,
+      });
+    }
+
+    user = await prismaClient.user.update({
+      where: {
+        username: user.username,
+      },
+      data: user,
+    });
+
+    return toUserResponse(user);
   }
 }

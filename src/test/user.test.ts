@@ -155,3 +155,63 @@ describe("GET /api/users/current", () => {
     expect(body.errors).toBeDefined();
   });
 });
+
+describe("PATCH /api/users/current", () => {
+  beforeEach(async () => {
+    await UserTest.create();
+  });
+
+  afterEach(async () => {
+    await UserTest.delete();
+  });
+  it("should reject if request is invalid", async () => {
+    const response = await app.request("/api/users/current", {
+      method: "PATCH",
+      headers: {
+        Authorization: "test",
+      },
+      body: JSON.stringify({ name: "", password: "" }),
+    });
+
+    expect(response.status).toBe(400);
+    const body = await response.json();
+    expect(body.errors).toBeDefined();
+  });
+
+  it("should be able to update name", async () => {
+    const response = await app.request("/api/users/current", {
+      method: "PATCH",
+      headers: {
+        Authorization: "test",
+      },
+      body: JSON.stringify({ name: "test" }),
+    });
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data).toBeDefined();
+    expect(body.data.name).toBe("test");
+  });
+
+  it("should be able to update password", async () => {
+    let response = await app.request("/api/users/current", {
+      method: "PATCH",
+      headers: {
+        Authorization: "test",
+      },
+      body: JSON.stringify({ password: "baru" }),
+    });
+    expect(response.status).toBe(200);
+    let body = await response.json();
+    expect(body.data).toBeDefined();
+    expect(body.data.name).toBe("test");
+
+    response = await app.request("/api/users/login", {
+      method: "post",
+
+      body: JSON.stringify({ username: "test", password: "baru" }),
+    });
+    expect(response.status).toBe(200);
+    body = await response.json();
+    expect(body.data).toBeDefined();
+  });
+});
