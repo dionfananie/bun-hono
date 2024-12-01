@@ -109,13 +109,13 @@ export class ContactService {
           contains: request.email,
         },
       });
-      if (request.phone) {
-        filter.push({
-          phone: {
-            contains: request.email,
-          },
-        });
-      }
+    }
+    if (request.phone) {
+      filter.push({
+        phone: {
+          contains: request.email,
+        },
+      });
     }
 
     const skip = (request.page - 1) * request.size;

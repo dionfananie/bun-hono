@@ -52,4 +52,10 @@ export class ContactTest {
       },
     });
   }
+
+  static async createMany(n: number) {
+    for (let i = 0; i < n; i++) {
+      await this.create();
+    }
+  }
 }
