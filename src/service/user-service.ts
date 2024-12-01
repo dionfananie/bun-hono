@@ -6,7 +6,7 @@ import {
   type RegisterUserRequest,
   type UpdateUserRequest,
   type UserResponse,
-} from "../model/user-mode.l";
+} from "../model/user-model";
 import { UserValidation } from "../validation/user-validation";
 import { HTTPException } from "hono/http-exception";
 
