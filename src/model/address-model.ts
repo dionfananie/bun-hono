@@ -17,10 +17,27 @@ export type AddressResponse = {
   country: string;
   postal_code: string;
 };
+
 export type GetAddressRequest = {
   contact_id: number;
   id: number;
 };
+
+export type UpdateAddressRequest = {
+  id: number;
+  contact_id: number;
+  street?: string | null;
+  city?: string | null;
+  province?: string | null;
+  country: string;
+  postal_code: string;
+};
+
+export type RemoveAddressRequest = {
+  id: number;
+  contact_id: number;
+};
+
 export function toAddressResponse(address: Address) {
   return {
     id: address.id,

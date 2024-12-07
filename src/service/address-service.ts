@@ -4,6 +4,7 @@ import {
   type AddressResponse,
   type CreateAddressRequest,
   type GetAddressRequest,
+  type UpdateAddressRequest,
 } from "../model/address-model";
 import { AddressValidation } from "../validation/address-validation";
 import { ContactService } from "./contact-service";
@@ -46,5 +47,39 @@ export class AddressService {
     await ContactService.contactMustExist(user, request.contact_id);
     const address = await this.addressMustExist(request.contact_id, request.id);
     return toAddressResponse(address);
+  }
+
+  static async update(
+    user: User,
+    request: UpdateAddressRequest
+  ): Promise<AddressResponse> {
+    request = AddressValidation.UPDATE.parse(request);
+    await ContactService.contactMustExist(user, request.contact_id);
+    await this.addressMustExist(request.contact_id, request.id);
+    const response = await prismaClient.address.update({
+      where: {
+        id: request.id,
+        contact_id: request.contact_id,
+      },
+      data: request,
+    });
+    return toAddressResponse(response);
+  }
+
+  static async remove(
+    user: User,
+    request: UpdateAddressRequest
+  ): Promise<AddressResponse> {
+    request = AddressValidation.GET.parse(request);
+    await ContactService.contactMustExist(user, request.contact_id);
+    await this.addressMustExist(request.contact_id, request.id);
+    const response = await prismaClient.address.update({
+      where: {
+        id: request.id,
+        contact_id: request.contact_id,
+      },
+      data: request,
+    });
+    return toAddressResponse(response);
   }
 }

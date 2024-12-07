@@ -5,6 +5,7 @@ import type { User } from "@prisma/client";
 import type {
   CreateAddressRequest,
   GetAddressRequest,
+  UpdateAddressRequest,
 } from "../model/address-model";
 import { AddressService } from "../service/address-service";
 
@@ -37,6 +38,34 @@ addressController.get("/api/contacts/:id/address/:addressId", async (c) => {
   };
 
   const response = await AddressService.get(user, request);
+  return c.json({
+    data: response,
+  });
+});
+
+addressController.put("/api/contacts/:id/address/:addressId", async (c) => {
+  const user = c.get("user") as User;
+  const contactId = Number(c.req.param("id"));
+  const addressId = Number(c.req.param("addressId"));
+  const request = (await c.req.json()) as UpdateAddressRequest;
+  request.id = addressId;
+  request.contact_id = contactId;
+
+  const response = await AddressService.update(user, request);
+  return c.json({
+    data: response,
+  });
+});
+
+addressController.delete("/api/contacts/:id/address/:addressId", async (c) => {
+  const user = c.get("user") as User;
+  const contactId = Number(c.req.param("id"));
+  const addressId = Number(c.req.param("addressId"));
+  const request = (await c.req.json()) as UpdateAddressRequest;
+  request.id = addressId;
+  request.contact_id = contactId;
+
+  const response = await AddressService.remove(user, request);
   return c.json({
     data: response,
   });
