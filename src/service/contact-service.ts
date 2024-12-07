@@ -24,11 +24,14 @@ export class ContactService {
       },
     });
 
-    return response;
+    return toContactResponse(response);
   }
 
-  static async checkingUser(user: User, id: number): Promise<ContactResponse> {
-    const response = await prismaClient.contact.findUnique({
+  static async contactMustExist(
+    user: User,
+    id: number
+  ): Promise<ContactResponse> {
+    const response = await prismaClient.contact.findFirst({
       where: {
         id,
         username: user.username,
@@ -44,7 +47,7 @@ export class ContactService {
 
   static async get(user: User, id: number): Promise<ContactResponse> {
     id = ContactValidation.GET.parse(id);
-    return await this.checkingUser(user, id);
+    return await this.contactMustExist(user, id);
   }
 
   static async update(
@@ -53,11 +56,10 @@ export class ContactService {
   ): Promise<ContactResponse> {
     request = ContactValidation.UPDATE.parse(request);
 
-    await this.checkingUser(user, request.id);
+    await this.contactMustExist(user, request.id);
     const contact = await prismaClient.contact.update({
       where: {
         username: user.username,
-        // username: user.username,
         id: request.id,
       },
       data: request,
@@ -68,7 +70,7 @@ export class ContactService {
 
   static async delete(user: User, id: number): Promise<boolean> {
     id = ContactValidation.DELETE.parse(id);
-    await this.checkingUser(user, id);
+    await this.contactMustExist(user, id);
     await prismaClient.contact.delete({
       where: {
         username: user.username,

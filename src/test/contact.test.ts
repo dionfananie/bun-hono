@@ -1,8 +1,6 @@
 import { describe, it, expect, afterEach, beforeEach } from "bun:test";
 import app from "..";
-import { logger } from "../application/logging";
 import { ContactTest, UserTest } from "./test.util";
-import type { ContactResponse } from "../model/contact-model";
 
 describe("POST /api/contacts", () => {
   beforeEach(async () => {

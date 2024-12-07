@@ -17,7 +17,10 @@ export type AddressResponse = {
   country: string;
   postal_code: string;
 };
-
+export type GetAddressRequest = {
+  contact_id: number;
+  id: number;
+};
 export function toAddressResponse(address: Address) {
   return {
     id: address.id,
@@ -26,5 +29,6 @@ export function toAddressResponse(address: Address) {
     province: address.province,
     country: address.country,
     postal_code: address.postal_code,
+    contact_id: address.contact_id,
   };
 }
