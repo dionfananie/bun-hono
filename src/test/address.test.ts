@@ -210,7 +210,7 @@ describe("PUT /api/contacts/:id/address/:addressId", () => {
           Authorization: "test",
         },
         body: JSON.stringify({
-          country: "Indonesia",
+          country: "Zimbabwe",
           postal_code: "12345",
         }),
       }
@@ -220,7 +220,114 @@ describe("PUT /api/contacts/:id/address/:addressId", () => {
     expect(body.data.street).toBe("Jalan");
     expect(body.data.city).toBe("Kota");
     expect(body.data.province).toBe("Provinsi");
-    expect(body.data.country).toBe("Indonesia");
+    expect(body.data.country).toBe("Zimbabwe");
     expect(body.data.postal_code).toBe("12345");
+  });
+});
+
+describe("DELETE /api/contacts/:id/address/:addressId", () => {
+  beforeEach(async () => {
+    await AddressTest.deleteAll();
+    await ContactTest.deleteAll();
+    await UserTest.delete();
+
+    await UserTest.create();
+    await ContactTest.create();
+    await AddressTest.create();
+  });
+
+  afterEach(async () => {
+    await AddressTest.deleteAll();
+    await ContactTest.deleteAll();
+    await UserTest.delete();
+  });
+
+  it("should rejected if address is not exist ", async () => {
+    const contact = await ContactTest.get();
+    const address = await AddressTest.get();
+    const response = await app.request(
+      "/api/contacts/" + contact.id + "/address/" + (address.id + 1),
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: "test",
+        },
+      }
+    );
+
+    expect(response.status).toBe(404);
+    const body = await response.json();
+    expect(body.errors).toBeDefined();
+  });
+
+  it("should success if address is exist ", async () => {
+    const contact = await ContactTest.get();
+    const address = await AddressTest.get();
+    const response = await app.request(
+      "/api/contacts/" + contact.id + "/address/" + address.id,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: "test",
+        },
+      }
+    );
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data).toBeTrue();
+  });
+});
+describe("LIST /api/contacts/:id/address/:addressId", () => {
+  beforeEach(async () => {
+    await AddressTest.deleteAll();
+    await ContactTest.deleteAll();
+    await UserTest.delete();
+
+    await UserTest.create();
+    await ContactTest.create();
+    await AddressTest.create();
+  });
+
+  afterEach(async () => {
+    await AddressTest.deleteAll();
+    await ContactTest.deleteAll();
+    await UserTest.delete();
+  });
+
+  it("should rejected if address is not exist ", async () => {
+    const contact = await ContactTest.get();
+    const response = await app.request(
+      "/api/contacts/" + (contact.id + 1) + "/address",
+      {
+        method: "GET",
+        headers: {
+          Authorization: "test",
+        },
+      }
+    );
+
+    expect(response.status).toBe(404);
+    const body = await response.json();
+    expect(body.errors).toBeDefined();
+  });
+
+  it("should success if address is exist ", async () => {
+    const contact = await ContactTest.get();
+    const address = await AddressTest.get();
+    const response = await app.request(
+      "/api/contacts/" + contact.id + "/address",
+      {
+        method: "GET",
+        headers: {
+          Authorization: "test",
+        },
+      }
+    );
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data).toBeDefined();
+    expect(body.data.length).toBe(1);
+    expect(body.data[0].id).toBe(address.id);
+    expect(body.data[0].city).toBe(address.city);
   });
 });

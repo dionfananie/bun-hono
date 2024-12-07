@@ -38,6 +38,10 @@ export type RemoveAddressRequest = {
   contact_id: number;
 };
 
+export type ListAddressRequest = {
+  contact_id: number;
+};
+
 export function toAddressResponse(address: Address) {
   return {
     id: address.id,
