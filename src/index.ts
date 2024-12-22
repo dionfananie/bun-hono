@@ -8,7 +8,7 @@ import { addressController } from "./controller/address-controller";
 const app = new Hono();
 
 app.get("/", (c) => {
-  return c.text("Hello Hono!");
+  return c.text("Hello Hono using bun now!");
 });
 
 app.route("/", userController);
