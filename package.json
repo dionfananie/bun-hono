@@ -5,6 +5,7 @@
     "start": "bun run src/index.ts"
   },
   "dependencies": {
+    "@hono/graphql-server": "^0.5.1",
     "@prisma/client": "6.0.0",
     "hono": "^4.6.12",
     "prisma": "^6.0.0",

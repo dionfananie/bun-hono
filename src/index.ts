@@ -4,6 +4,7 @@ import { HTTPException } from "hono/http-exception";
 import { ZodError } from "zod";
 import { contactController } from "./controller/contact-controller";
 import { addressController } from "./controller/address-controller";
+import { appGqlServer } from "./controller/gql-controller";
 
 const app = new Hono();
 
@@ -11,6 +12,7 @@ app.get("/", (c) => {
   return c.text("Hello Hono using bun now!");
 });
 
+app.route("/", appGqlServer);
 app.route("/", userController);
 app.route("/", contactController);
 app.route("/", addressController);
