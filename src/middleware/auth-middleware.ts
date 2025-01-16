@@ -1,4 +1,4 @@
-import type { MiddlewareHandler } from "hono";
+import type { Context, MiddlewareHandler } from "hono";
 import { Userservice } from "../service/user-service";
 
 export const authMiddleware: MiddlewareHandler = async (c, next) => {
